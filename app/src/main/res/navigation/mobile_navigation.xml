@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_movies">
+
+    <fragment
+        android:id="@+id/navigation_movies"
+        android:name="com.franco.mytestapplication.presentation.movies.MoviesFragment"
+        android:label="@string/title_movies"
+        tools:layout="@layout/movies_fragment" >
+        <action
+            android:id="@+id/action_navigation_movies_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.franco.mytestapplication.presentation.map.MapFragment"
+        android:label="@string/title_map_history"
+        tools:layout="@layout/map_fragment" >
+        <action
+            android:id="@+id/action_navigation_pending_to_watch_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_images_library"
+        android:name="com.franco.mytestapplication.presentation.imagelibrary.ImageLibraryFragment"
+        android:label="@string/title_images_library"
+        tools:layout="@layout/image_library_fragment" >
+        <action
+            android:id="@+id/action_navigation_top_rated_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+
+    <!--dialog
+        android:id="@+id/navigation_detail"
+        android:name="mx.dev.franco.mymovies.ui.detail.MovieDetailFragment"
+        tools:layout="@layout/fragment_movie_detail">
+        <argument android:name="movie_id"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+    </dialog-->
+
+</navigation>

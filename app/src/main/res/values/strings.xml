@@ -1,3 +1,39 @@
 <resources>
-    <string name="app_name">MyTestApplication</string>
+    <string name="app_name" translatable="false">MyTestApplication</string>
+    <string name="title_top_rated">Principales</string>
+    <string name="title_popular">Populares</string>
+    <string name="default_error_message">Error desconocido.</string>
+    <string name="cannot_connect_to_server">No se puede conectar al servidor.</string>
+    <string name="retry">Reintentar</string>
+    <string name="type_movie">Buscar</string>
+    <string name="search_movie">Buscar película</string>
+    <string name="loading_cover">Cargando carátula</string>
+    <string name="message_connection">No tienes conexión a internet.</string>
+    <string name="search_results_text">Se han encontrado %1$s resultados</string>
+    <string name="no_video">Trailer no disponible</string>
+    <string name="release_date">Fecha de lanzamiento</string>
+    <string name="genre">Género</string>
+    <string name="budget">Presupuesto</string>
+    <string name="revenue">Ingresos</string>
+    <string name="homepage">Sitio web</string>
+    <string name="director">Director</string>
+    <string name="production_company">Compañía productora</string>
+    <string name="state">Estado</string>
+    <string name="user_score">Promedio de votos</string>
+    <string name="as">como</string>
+    <string name="cast">Reparto</string>
+    <string name="internal_error">Error interno del reproductor.</string>
+    <string name="video_not_found">Video no encontrado.</string>
+    <string name="video_no_playable">No se puede reproducir el video en el reproductor interno.</string>
+    <string name="message_local_copy">Conectate a internet para obtener el detalle.</string>
+    <string name="message_local_search">Solo se mostrarán resultados locales.</string>
+    <string name="message_local_data">Solo se mostrarán datos locales.</string>
+    <string name="popularity">Popularidad</string>
+    <string name="title_favorites">Favoritas</string>
+    <string name="title_pending_to_watch">Por ver</string>
+    <string name="crew">Producción</string>
+    <string name="empty_query">El término a buscar no puede estar vacío.</string>
+    <string name="title_movies">Películas</string>
+    <string name="title_map_history">Historial de ubicaciones</string>
+    <string name="title_images_library">Biblioteca de imagenes</string>
 </resources>
