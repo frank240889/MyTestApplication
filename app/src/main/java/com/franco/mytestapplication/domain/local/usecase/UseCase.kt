@@ -7,7 +7,7 @@ package com.franco.mytestapplication.domain.local.usecase
  */
 abstract class UseCase<Response> {
 
-    abstract suspend fun execute(): Response
+    abstract fun execute(): Response
 
     fun release() {}
 }

@@ -10,6 +10,14 @@ plugins {
 android {
     compileSdk 31
 
+    /**
+     * For security reasons, put the apikey in external file outside and avoid version it,
+     * so will be necessary to own this file to compile the project.
+     */
+    def apikeyFile = rootProject.file("apikeys.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyFile))
+
     defaultConfig {
         applicationId "com.franco.mytestapplication"
         minSdk 21
@@ -22,10 +30,13 @@ android {
         renderscriptTargetApi 30 // This number must match target sdk and build tools
         renderscriptSupportModeEnabled true
 
+        manifestPlaceholders = [MAPS_API_KEY: apikeyProperties["mapsapikey"]]
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField 'String', 'MY_MOVIES_BASE_URL', '\"https://api.themoviedb.org/\"'
         buildConfigField 'String', 'API_KEY', apikeyProperties["apikey"]
         buildConfigField 'int', 'DATABASE_VERSION', "1"
+
     }
 
     buildTypes {
@@ -104,6 +115,8 @@ dependencies {
 
     implementation "androidx.paging:paging-runtime-ktx:3.0.1" // For Kotlin use paging-runtime-ktx
 
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+
     // alternatively - without Android dependencies for testing
     testImplementation "androidx.paging:paging-common-ktx:3.0.1" // For Kotlin use paging-common-ktx
 
@@ -126,4 +139,5 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:2.24.5"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+
 }

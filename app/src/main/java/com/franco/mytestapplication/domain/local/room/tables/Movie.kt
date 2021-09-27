@@ -30,11 +30,5 @@ data class Movie(
     @ColumnInfo(name = "popularity")
     val popularity: Float,
     @ColumnInfo(name = "vote_average")
-    val voteAverage: Float,
-    @ColumnInfo(name = "genre")
-    val genre: String,
-    @ColumnInfo(name = "favorite")
-    val favorite: Boolean = false,
-    @ColumnInfo(name = "pending_to_watch")
-    val pendingToWatch: Boolean = false
+    val voteAverage: Float
 )

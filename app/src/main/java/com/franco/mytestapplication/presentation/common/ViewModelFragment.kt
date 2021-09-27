@@ -14,13 +14,7 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 /**
- * This stuff works...
- *
- * @author Franco Omar Castillo Bello / youremail@domain.com
- * Created 25/09/21 at 12:57 p.m.
- */
-/**
- * This stuff works...
+ * Base fragment for other screens.
  *
  * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 12:57 p.m.
@@ -37,7 +31,7 @@ abstract class ViewModelFragment<VM: ViewModel, VB: ViewBinding>: Fragment(), Ha
 
     private var _viewBinding: VB? = null
 
-    protected val viewBinding: VB = _viewBinding!!
+    protected val viewBinding: VB get() = _viewBinding!!
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)

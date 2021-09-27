@@ -1,7 +1,8 @@
 package com.franco.mytestapplication.interfaces
 
 /**
- * This stuff works...
+ * A wrapper for [SharedPreferences] to avoid passing a context directly to save/fetch arbitrary
+ * data
  *
  * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 7:19 p.m.

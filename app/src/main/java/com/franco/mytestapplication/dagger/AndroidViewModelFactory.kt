@@ -7,13 +7,7 @@ import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
- * This stuff works...
- *
- * @author Franco Omar Castillo Bello / youremail@domain.com
- * Created 25/09/21 at 2:10 p.m.
- */
-/**
- * This stuff works...
+ * Factory to view models.
  *
  * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 2:10 p.m.

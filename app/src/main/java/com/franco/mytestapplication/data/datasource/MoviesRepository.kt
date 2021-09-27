@@ -1,35 +1,35 @@
 package com.franco.mytestapplication.data.datasource
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadType
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
+import androidx.paging.*
+import androidx.room.withTransaction
+import com.franco.mytestapplication.data.remote.CONFIGURATION
+import com.franco.mytestapplication.data.remote.PAGE
+import com.franco.mytestapplication.data.remote.PAGE_POPULAR
 import com.franco.mytestapplication.data.remote.TheMovieDbApi
-import com.franco.mytestapplication.data.remote.TheMovieDbApi.Companion.PAGE_POPULAR
 import com.franco.mytestapplication.domain.local.room.db.MoviesDatabase
-import com.franco.mytestapplication.domain.local.room.tables.Genres
 import com.franco.mytestapplication.domain.local.room.tables.Movie
 import com.franco.mytestapplication.domain.remote.models.MoviesResponse
 import com.franco.mytestapplication.domain.remote.models.configuration.ConfigurationResponse
 import com.franco.mytestapplication.interfaces.AbstractSharedPreferences
 import com.franco.mytestapplication.interfaces.Repository
+import com.franco.mytestapplication.utils.AUTOMATIC_QUALITY
+import com.franco.mytestapplication.utils.Utils
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import retrofit2.HttpException
 import java.io.IOException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
-import kotlinx.coroutines.flow.Flow
-import retrofit2.HttpException
+import javax.inject.Inject
 
 /**
- * This stuff works...
+ * An implementation of repository.
  *
- * @author Franco Omar Castillo Bello / youremail@domain.com
+ * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 7:15 p.m.
  */
-class MoviesRepository(
+
+class MoviesRepository @Inject constructor(
     private val sharedPreferences: AbstractSharedPreferences,
     private val api: TheMovieDbApi,
     private val db: MoviesDatabase
@@ -38,12 +38,8 @@ class MoviesRepository(
     private val gson = Gson()
     private var configuration: ConfigurationResponse? = null
 
-    private val genres: MutableList<Genres> by lazy {
-        ArrayList()
-    }
-
     @ExperimentalPagingApi
-    override fun fetchMovies(): Flow<PagingData<Movie>> {
+    override fun fetchMovies(): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
                 pageSize = 4,
@@ -55,9 +51,9 @@ class MoviesRepository(
                     api.fetchPopularMovies(it)
                 }
             },
-            pagingSourceFactory = { db.myMoviesDao().fetchTopRatedMovies() }
+            pagingSourceFactory = { db.myMoviesDao().fetchMovies() }
         ).flow
-    }
+
 
     @ExperimentalPagingApi
     private suspend fun loadMoviesTask(loadType: LoadType,
@@ -74,16 +70,13 @@ class MoviesRepository(
 
         val queryParams = TheMovieDbApi.QueryParams
             .Builder()
-            .addQueryParam(TheMovieDbApi.PAGE, page.toString())
+            .addQueryParam(PAGE, page.toString())
             .build()
 
         try {
 
             if (configuration == null) {
                 fetchConfiguration()
-            }
-            if (genres.isEmpty()) {
-                fetchGenres(api, db, genres)
             }
 
             val response = apiCall.invoke(queryParams.getParams())
@@ -94,7 +87,7 @@ class MoviesRepository(
             }
             val baseurl = Utils.resolveBaseUrlImage(configuration!!, size)
             db.withTransaction {
-                db.myMoviesDao().insert(Utils.createMovies(response, genres, baseurl))
+                db.myMoviesDao().insert(Utils.createMovies(response, baseurl))
                 sharedPreferences.saveInt(pageQuery, response.page + 1)
             }
             return RemoteMediator.MediatorResult.Success(endOfPaginationReached = endOfPagination)
@@ -122,28 +115,11 @@ class MoviesRepository(
     private fun initialPage() = 1
 
     /**
-     * Fetch configuration and saves into shared preferences.
+     * Fetch configuration and saves into shared preferences. Configuration is necessary to be able
+     * to fetch a valid poster size.
      */
     private suspend fun fetchConfiguration() = with(api.fetchConfiguration()) {
         configuration = this
-        sharedPreferencesManager.saveString("configuration", gson.toJson(this))
-    }
-
-    companion object {
-        suspend fun fetchGenres(
-            api: TheMovieDbApi,
-            db: MyMoviesDatabase,
-            emptyGenresList: MutableList<Genres>
-        ) {
-            api.fetchGenres().apply {
-                db.withTransaction {
-                    db.myMoviesDao().insertGenres(genres.map {
-                        Genres(it.id, it.name)
-                    }.apply {
-                        emptyGenresList.addAll(this)
-                    })
-                }
-            }
-        }
+        sharedPreferences.saveString(CONFIGURATION, gson.toJson(this))
     }
 }

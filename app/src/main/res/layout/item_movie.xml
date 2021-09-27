@@ -34,7 +34,6 @@
             android:layout_width="@dimen/default_item_movie_width"
             android:layout_height="@dimen/default_item_movie_height"
             android:scaleType="fitCenter"
-            android:layout_marginTop="@dimen/double_margin"
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

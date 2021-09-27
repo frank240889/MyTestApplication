@@ -1,15 +1,18 @@
 package com.franco.mytestapplication.presentation.splash
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.franco.mytestapplication.presentation.MainActivity
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * A simple splash screen.
  */
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

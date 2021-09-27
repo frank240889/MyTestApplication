@@ -5,14 +5,17 @@ import android.app.Application
 import android.content.Context
 import com.franco.mytestapplication.BuildConfig
 import com.franco.mytestapplication.interfaces.AbstractSharedPreferences
+import javax.inject.Inject
 
 /**
- * This stuff works...
+ * A wrapper for shared preferences.
  *
  * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 7:20 p.m.
  */
-class AndroidSharedPreferences(application: Application): AbstractSharedPreferences {
+class AndroidSharedPreferences @Inject constructor(
+    application: Application
+): AbstractSharedPreferences {
     private val sharedPreferences = application.getSharedPreferences(
         BuildConfig.APPLICATION_ID,
         Context.MODE_PRIVATE

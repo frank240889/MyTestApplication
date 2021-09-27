@@ -24,17 +24,12 @@ import com.franco.mytestapplication.domain.local.room.tables.Movie
 import com.google.android.material.card.MaterialCardView
 
 /**
- * This stuff works...
+ * The adapter to show the movies.
  *
- * @author Franco Omar Castillo Bello / youremail@domain.com
- * Created 25/09/21 at 2:44 p.m.
+ * @author Franco Omar Castillo Bello
+ * Created 25/09/21 at 3:50 p.m.
  */
-class MoviesAdapter (
-    /**
-     * A listener for listening click events.
-     */
-    private val onMovieInteraction: (Movie) -> Unit
-    ): PagingDataAdapter<Movie, MoviesAdapter.MovieHolder>(DIFF_CALLBACK) {
+class MoviesAdapter(): PagingDataAdapter<Movie, MoviesAdapter.MovieHolder>(DIFF_CALLBACK) {
 
         companion object {
             val DIFF_CALLBACK = object: DiffUtil.ItemCallback<Movie>() {
@@ -84,15 +79,11 @@ class MoviesAdapter (
         /**
          * Holder class
          */
-        inner class MovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        inner class MovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             private val preview: ImageView = itemView.findViewById(R.id.im_preview_movie)
             private val title: TextView = itemView.findViewById(R.id.tv_title_movie)
             private val description: TextView = itemView.findViewById(R.id.tv_description_movie)
             private val progressLoadingPreview: ProgressBar = itemView.findViewById(R.id.pb_image_progress_loading)
-
-            init {
-                itemView.setOnClickListener(this)
-            }
 
             fun bind(movie: Movie) {
                 title.text = movie.title
@@ -143,10 +134,6 @@ class MoviesAdapter (
                     .error(R.drawable.ic_placeholder)
                     .thumbnail(0.2f)
                     .into(preview)
-            }
-
-            override fun onClick(v: View?) {
-                onMovieInteraction(getItem(bindingAdapterPosition)!!)
             }
         }
 }

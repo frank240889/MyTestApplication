@@ -3,9 +3,7 @@ package com.franco.mytestapplication.domain.remote.models
 import com.google.gson.annotations.SerializedName
 
 /**
- * This stuff works...
- *
- * @author Franco Omar Castillo Bello / youremail@domain.com
+ * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 7:26 p.m.
  */
 data class MoviesResponse(

@@ -2,14 +2,16 @@ package com.franco.mytestapplication.dagger
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.franco.mytestapplication.presentation.map.MapViewModel
+import com.franco.mytestapplication.presentation.movies.MoviesViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
 /**
- * This stuff works...
+ * View models module for injection
  *
- * @author Franco Omar Castillo Bello / youremail@domain.com
+ * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 2:08 p.m.
  */
 @Module
@@ -30,4 +32,14 @@ abstract class AndroidViewModelModule {
      * Instead of creating one module per ViewModel, we use the term Multi Bindings to tell Dagger how associate a
      * certain number of dependencies into a Map.
      */
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MoviesViewModel::class)
+    abstract fun providesMoviesViewModel(moviesViewModel: MoviesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MapViewModel::class)
+    abstract fun providesMapViewMode(mapViewModel: MapViewModel): ViewModel
 }

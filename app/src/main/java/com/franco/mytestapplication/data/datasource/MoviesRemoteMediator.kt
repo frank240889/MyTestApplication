@@ -7,7 +7,8 @@ import androidx.paging.RemoteMediator
 import com.franco.mytestapplication.domain.local.room.tables.Movie
 
 /**
- * This stuff works...
+ * A data source that is in charge to orchestrate the process to download movies data
+ * and then saved them into a local database
  *
  * @author Franco Omar Castillo Bello
  * Created 25/09/21 at 7:16 p.m.

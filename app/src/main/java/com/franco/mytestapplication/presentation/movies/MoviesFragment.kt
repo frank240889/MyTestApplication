@@ -1,26 +1,34 @@
 package com.franco.mytestapplication.presentation.movies
 
 import android.content.res.Configuration
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.viewbinding.ViewBinding
 import com.franco.mytestapplication.R
 import com.franco.mytestapplication.databinding.MoviesFragmentBinding
 import com.franco.mytestapplication.interfaces.ErrorHandler
 import com.franco.mytestapplication.presentation.common.ViewModelFragment
+import com.franco.mytestapplication.presentation.map.MapFragment
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import javax.inject.Inject
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+
+/**
+ * Base fragment for other screens.
+ *
+ * @author Franco Omar Castillo Bello
+ * Created 25/09/21 at 12:57 p.m.
+ */
 class MoviesFragment: ViewModelFragment<MoviesViewModel, MoviesFragmentBinding>() {
 
     @Inject
@@ -44,16 +52,28 @@ class MoviesFragment: ViewModelFragment<MoviesViewModel, MoviesFragmentBinding>(
     )[MoviesViewModel::class.java]
 
     override fun onLoading(loading: Boolean) {
-
+        viewBinding.flProgressContainer.visibility = if (loading) VISIBLE else GONE
     }
 
+    @ExperimentalPagingApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2
-        viewBinding.rvMoviesList.apply {
-            layoutManager = GridLayoutManager(requireActivity(), spanCount)
-            adapter = this@MoviesFragment.adapter
-        }
+        initToolbar()
+        initExtendedFab()
+        setupMovieList()
+        setupAdapterMovies()
+        initFetching()
+    }
 
+    @ExperimentalPagingApi
+    private fun initFetching() {
+        lifecycleScope.launch(fetchingJob) {
+            viewModel.fetchMovies().collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
+
+    private fun setupAdapterMovies() {
         adapter.addLoadStateListener { loadState ->
 
             onLoading(loadState.mediator?.append == LoadState.Loading)
@@ -73,30 +93,50 @@ class MoviesFragment: ViewModelFragment<MoviesViewModel, MoviesFragmentBinding>(
                     Snackbar.make(
                         viewBinding.root,
                         readableMessage,
-                        Snackbar.LENGTH_LONG).apply {
-                        setAction(getString(R.string.retry)) {
-                            adapter.retry()
-                        }
-                        animationMode = Snackbar.ANIMATION_MODE_FADE
+                        Snackbar.LENGTH_INDEFINITE).apply {
+                            setAction(getString(R.string.retry)) {
+                                adapter.retry()
+                            }
+                            behavior = object : BaseTransientBottomBar.Behavior() {
+                                override fun canSwipeDismissView(child: View) = false
+
+                            }
+                            animationMode = Snackbar.ANIMATION_MODE_FADE
                     }.show()
                 }
         }
+    }
 
-        lifecycleScope.launch(fetchingJob) {
-            /*viewModel.getPopularMovies().collectLatest {
-                adapter.submitData(it)
-            }*/
+    private fun setupMovieList() {
+        val spanCount =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2
+        viewBinding.rvMoviesList.apply {
+            layoutManager = GridLayoutManager(requireActivity(), spanCount)
+            adapter = this@MoviesFragment.adapter
         }
     }
 
-    private fun provideMoviesAdapter() =
-        MoviesAdapter { movie ->
-            findNavController()
-                .navigate(
-                    MoviesFragmentDirections
-                        .actionNavigationMoviesToNavigationDetail()
-                )
-        }
+    private fun provideMoviesAdapter() = MoviesAdapter()
 
+    private fun initToolbar() {
+        viewBinding.mtToolbarMovies.apply {
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.item_movies_menu_upload_image -> {
+                        TODO("No implemented yet.")
+                    }
+                }
+                return@setOnMenuItemClickListener false
+            }
+
+            title = getString(R.string.title_movies)
+        }
+    }
+
+    private fun initExtendedFab() {
+        viewBinding.efabPlaces.setOnClickListener {
+            MapFragment.newInstance().showNow(childFragmentManager, MapFragment::class.java.name)
+        }
+    }
 
 }
