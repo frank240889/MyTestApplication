@@ -185,7 +185,7 @@ class MapFragment : BottomSheetDialogFragment(), OnMapReadyCallback, HasAndroidI
     }
 
     private fun requestLocationPermission() {
-        permissionRequestLauncher.launch(locationsPermissions)
+
     }
 
     private fun hasLocationPermissions() =
