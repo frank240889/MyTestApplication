@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_navigation">
 
     <activity android:id="@+id/navigation_main_activity"
-        android:name="mx.dev.franco.mymovies.ui.MainActivity"
-        tools:layout="@layout/activity_main"
-        app:action="@id/navigation_detail">
+        android:name="com.franco.mytestapplication.presentation.MainActivity"
+        tools:layout="@layout/activity_main">
     </activity>
-
-
-    <dialog
-        android:id="@+id/navigation_detail"
-        android:name="mx.dev.franco.mymovies.ui.detail.MovieDetailFragment"
-        tools:layout="@layout/fragment_movie_detail">
-        <argument android:name="movie_id"
-            app:argType="integer"
-            android:defaultValue="-1"/>
-    </dialog>
 
 </navigation>
